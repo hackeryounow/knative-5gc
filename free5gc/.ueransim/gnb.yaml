@@ -1,0 +1,17 @@
+mcc: '208'
+mnc: '93'
+nci: '0x000000010'
+idLength: 24
+ignoreStreamIds: true
+pagingDrx: 'R32'
+tac: '000001'
+linkIp: 127.0.0.1
+ngapIp: 192.168.100.1
+gtpIp: 192.168.100.1
+amfConfigs:
+  - address: 192.168.100.1
+    port: 38412
+slices:
+  - sst: 1
+    # This UERANSIM build parses sd as DECIMAL; 66051 = 0x010203 on air
+    sd: '66051'

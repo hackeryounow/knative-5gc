@@ -1,0 +1,42 @@
+dependencies:
+- name: common
+  repository: file://../common
+  version: 2.36.0
+- name: mongodb
+  repository: file://../mongodb
+  version: 18.0.5
+- name: free5gc-amf
+  repository: file://../free5gc-amf
+  version: 0.1.3
+- name: free5gc-ausf
+  repository: file://../free5gc-ausf
+  version: 0.1.3
+- name: free5gc-chf
+  repository: file://../free5gc-chf
+  version: 0.1.3
+- name: free5gc-nrf
+  repository: file://../free5gc-nrf
+  version: 0.1.3
+- name: free5gc-nssf
+  repository: file://../free5gc-nssf
+  version: 0.1.3
+- name: free5gc-pcf
+  repository: file://../free5gc-pcf
+  version: 0.1.3
+- name: free5gc-smf
+  repository: file://../free5gc-smf
+  version: 0.1.3
+- name: free5gc-udm
+  repository: file://../free5gc-udm
+  version: 0.1.3
+- name: free5gc-udr
+  repository: file://../free5gc-udr
+  version: 0.1.3
+- name: free5gc-upf
+  repository: file://../free5gc-upf
+  version: 0.1.3
+- name: free5gc-webui
+  repository: file://../free5gc-webui
+  version: 0.1.3
+digest: sha256:83330ed141f7e892ddac9ed49874ac099f4bbffd76e85ac2a0040fc678baf34e
+generated: "2026-03-15T16:08:38.87831304+08:00"

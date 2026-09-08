@@ -4,3 +4,6 @@
 
 # Local release/upload script (config edited per release) - not committed.
 upload.sh
+
+# Local backups of embedded/nested .git dirs (kept out of version control).
+/.git-backups/
