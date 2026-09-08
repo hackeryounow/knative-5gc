@@ -1,0 +1,91 @@
+# UERANSIM gNB for the open5gs core, run as a NORMAL CNI pod (no hostNetwork).
+# The image entrypoint (/entrypoint.sh gnb) resolves N2_IFACE/N3_IFACE/RADIO_IFACE
+# (=eth0) to the pod IP and AMF_HOSTNAME to the AMF pod IP, then envsubst-renders
+# /etc/ueransim/gnb.yaml and execs nr-gnb. ngapIp/gtpIp/linkIp therefore become
+# the gNB pod IP: the AMF (pod) and UPF (pod) reach it directly over the CNI and
+# the gNB never binds the host NIC.
+#
+# Two headless services are included:
+#  - open5gs-amf-ngap-headless: resolves to the AMF POD IP so the gNB's SCTP N2
+#    association is direct pod-to-pod. Using the ClusterIP (open5gs-amf-ngap)
+#    would hit the same single-node reverse-DNAT asymmetry that broke SMF<->UPF
+#    PFCP; the pod IP avoids kube-proxy DNAT entirely.
+#  - ueransim-gnb: lets the UE resolve GNB_HOSTNAME -> gNB pod IP for the radio
+#    link (RLS) and N3, again pod-to-pod with no DNAT.
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-amf-ngap-headless
+  namespace: open5gs
+  labels:
+    app.kubernetes.io/name: amf
+    app.kubernetes.io/component: ngap-headless
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/name: amf
+  ports:
+    - name: ngap
+      port: 38412
+      protocol: SCTP
+      targetPort: 38412
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ueransim-gnb
+  namespace: open5gs
+  labels:
+    app: ueransim-gnb
+spec:
+  containers:
+    - name: gnb
+      image: docker.io/gradiant/ueransim:3.2.6
+      imagePullPolicy: IfNotPresent
+      args: ["gnb"]
+      env:
+        - name: N2_IFACE
+          value: "eth0"
+        - name: N3_IFACE
+          value: "eth0"
+        - name: RADIO_IFACE
+          value: "eth0"
+        - name: AMF_HOSTNAME
+          value: "open5gs-amf-ngap-headless"
+      ports:
+        - name: gnb-ue
+          containerPort: 4997
+          protocol: UDP
+        - name: gnb-upf
+          containerPort: 2152
+          protocol: UDP
+      volumeMounts:
+        - name: config
+          mountPath: /etc/ueransim/gnb.yaml
+          subPath: gnb.yaml
+  volumes:
+    - name: config
+      configMap:
+        name: ueransim-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ueransim-gnb
+  namespace: open5gs
+  labels:
+    app: ueransim-gnb
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  selector:
+    app: ueransim-gnb
+  ports:
+    - name: gnb-ue
+      port: 4997
+      protocol: UDP
+    - name: gnb-upf
+      port: 2152
+      protocol: UDP

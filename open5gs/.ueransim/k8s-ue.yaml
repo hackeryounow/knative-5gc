@@ -1,0 +1,36 @@
+# UERANSIM UE for the open5gs core, run as a NORMAL CNI pod (no hostNetwork).
+# The image entrypoint (/entrypoint.sh ue) resolves GNB_HOSTNAME (the headless
+# gNB service) to the gNB pod IP, envsubst-renders /etc/ueransim/ue.yaml and
+# execs nr-ue. The PDU-session tunnel (uesimtun0, 10.45.0.x) is created inside
+# THIS pod's netns, so nothing is added to the host. privileged + NET_ADMIN are
+# required to create the tun device; they do NOT share the host NIC (the pod
+# keeps its own network namespace). Test connectivity from inside the pod:
+#   kubectl exec -n open5gs ueransim-ue -- ping -c3 8.8.8.8
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ueransim-ue
+  namespace: open5gs
+  labels:
+    app: ueransim-ue
+spec:
+  containers:
+    - name: ue
+      image: docker.io/gradiant/ueransim:3.2.6
+      imagePullPolicy: IfNotPresent
+      args: ["ue", "-n", "1"]
+      env:
+        - name: GNB_HOSTNAME
+          value: "ueransim-gnb"
+      securityContext:
+        privileged: true
+        capabilities:
+          add: ["NET_ADMIN"]
+      volumeMounts:
+        - name: config
+          mountPath: /etc/ueransim/ue.yaml
+          subPath: ue.yaml
+  volumes:
+    - name: config
+      configMap:
+        name: ueransim-config

@@ -1,0 +1,45 @@
+dependencies:
+- name: common
+  repository: file://../common
+  version: 2.36.0
+- name: mongodb
+  repository: file://../mongodb
+  version: 18.0.5
+- name: open5gs-amf
+  repository: file://../open5gs-amf
+  version: 2.3.1
+- name: open5gs-ausf
+  repository: file://../open5gs-ausf
+  version: 2.3.1
+- name: open5gs-bsf
+  repository: file://../open5gs-bsf
+  version: 2.3.1
+- name: open5gs-nrf
+  repository: file://../open5gs-nrf
+  version: 2.3.1
+- name: open5gs-nssf
+  repository: file://../open5gs-nssf
+  version: 2.3.1
+- name: open5gs-pcf
+  repository: file://../open5gs-pcf
+  version: 2.3.1
+- name: open5gs-scp
+  repository: file://../open5gs-scp
+  version: 2.3.1
+- name: open5gs-smf
+  repository: file://../open5gs-smf
+  version: 2.3.1
+- name: open5gs-udm
+  repository: file://../open5gs-udm
+  version: 2.3.1
+- name: open5gs-udr
+  repository: file://../open5gs-udr
+  version: 2.3.1
+- name: open5gs-upf
+  repository: file://../open5gs-upf
+  version: 2.3.2
+- name: open5gs-webui
+  repository: file://../open5gs-webui
+  version: 2.3.1
+digest: sha256:56e9edec1f6130e9a423fe33577f3955157cdaae732619f2ca6259e69d4f73e0
+generated: "2026-09-07T15:01:08.330399809+08:00"

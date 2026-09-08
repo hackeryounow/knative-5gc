@@ -1,0 +1,6 @@
+# Reference repo (Gradiant 5G Charts), cloned for reference only — not part of
+# this project's deliverables. It is a nested git repo, so ignore it entirely.
+/5g-charts/
+
+# Local release/upload script (config edited per release) - not committed.
+upload.sh

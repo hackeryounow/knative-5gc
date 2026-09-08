@@ -1,0 +1,19 @@
+mcc: '999'
+mnc: '70'
+nci: '0x000000010'
+idLength: 24
+ignoreStreamIds: true
+pagingDrx: 'R32'
+tac: '000001'
+# Bind IPs are rendered at container start by /entrypoint.sh (gnb): the
+# RADIO/N2/N3 addresses come from the pod's eth0 (its CNI pod IP) and AMF_IP is
+# resolved from AMF_HOSTNAME, so the gNB never binds the host NIC.
+linkIp: ${RADIO_BIND_IP}
+ngapIp: ${N2_BIND_IP}
+gtpIp: ${N3_BIND_IP}
+amfConfigs:
+  - address: ${AMF_IP}
+    port: 38412
+slices:
+  - sst: 1
+    sd: '0x111111'
